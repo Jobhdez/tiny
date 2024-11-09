@@ -24,13 +24,13 @@ def handle_request(data):
                 header = "\r\n".join(headers).encode()
                 response_line = response_line.encode()
                 return b''.join([response_line, header, b'\r\n', body])
-            else:
-                response_line = 'HTTP/1.1 404 Not Found\r\n'
-                headers = ["Server: Manifold Server", "Content-Type: text/html\r\n"]
-                header = "\r\n".join(headers).encode()
-                body = b'<h1>404 Not Found</h1>'
-                response_line = response_line.encode()
-                return b''.join([response_line, header, b'\r\n', body])
+
+            response_line = 'HTTP/1.1 404 Not Found\r\n'
+            headers = ["Server: Manifold Server", "Content-Type: text/html\r\n"]
+            header = "\r\n".join(headers).encode()
+            body = b'<h1>404 Not Found</h1>'
+            response_line = response_line.encode()
+            return b''.join([response_line, header, b'\r\n', body])
 
         case _:
             response_line = 'HTTP/1.1 501 Not Implemented\r\n'
