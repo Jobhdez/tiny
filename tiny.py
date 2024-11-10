@@ -6,7 +6,7 @@ HOST = "127.0.0.1"
 PORT = 65432
 
 def handle_request(data):
-    method, uri, version = parse_get_request(data)
+    method, uri, version = parse_request(data)
 
     match method:
         case 'GET':
@@ -31,6 +31,21 @@ def handle_request(data):
             body = b'<h1>404 Not Found</h1>'
             response_line = response_line.encode()
             return b''.join([response_line, header, b'\r\n', body])
+          
+        case 'POST':
+          key_val_pattern = rb'(\w+)=([^&\s]+)'
+          data = re.findall(key_val_pattern, data)
+          val = int(data[0][1].decode())
+          val2 = int(data[1][1].decode())
+
+          body = f"<h1> the result is {val+val2}</h1>"
+
+          response_line = 'HTTP/1.1 200 OK\r\n'
+          headers = ["Server: Manifold Server", "Content-Type: text/html\r\n"]
+          header = "\r\n".join(headers).encode()
+          response_line = response_line.encode()
+          body = body.encode()
+          return b''.join([response_line, header, b'\r\n', body])
 
         case _:
             response_line = 'HTTP/1.1 501 Not Implemented\r\n'
@@ -40,8 +55,8 @@ def handle_request(data):
             response_line = response_line.encode()
             return b''.join([response_line, header, b'\r\n', body])
 
-def parse_get_request(request):
-    pattern = re.compile(rb"^GET .+ HTTP/[0-9]*\.[0-9]+", re.MULTILINE)
+def parse_request(request):
+    pattern = re.compile(rb"^GET|POST .+ HTTP/[0-9]*\.[0-9]+", re.MULTILINE)
     request_line = pattern.findall(request)[0]
 
     components = request_line.split(b' ')
