@@ -10,7 +10,7 @@ def handle_request(data):
         method, uri, version = parse_request(data)
     except ValueError as e:
         print(f"Error parsing request: {e}")
-        return build_response("400 Bad Request", "<h1>400 Bad Request</h1>")
+        return build_response("400 Bad Request", f"<h1>400 Bad Request:{e}</h1>")
 
     match method:
         case 'GET':
@@ -28,17 +28,19 @@ def handle_request(data):
         case 'POST':
             print(data)
             #key_val_pattern = rb'(\w+)=([^&\s]+)'
-            key_val_pattern = rb'(\w+)=([^&\s]+)'
+            #key_val_pattern = rb'(\w+)=([^&\s]+)'
 
-            data = re.findall(key_val_pattern, data)
+            #data = re.findall(key_val_pattern, data)
+            #print(data)
+            data = parse_qs("num1=2&num2=4")
             print(data)
             try:
-                val = int(data[0][1].decode())
-                val2 = int(data[1][1].decode())
+                val = int(data['num1'][0])
+                val2 = int(data['num2'][0])
                 body = f"<h1>The result is {val + val2}</h1>"
                 return build_response("200 OK", body)
-            except (IndexError, ValueError):
-                return build_response("400 Bad Request", "<h1>400 Bad Request</h1>")
+            except  ValueError as e:
+                return build_response("400 Bad Request :)", f"<h1>400 Bad Request{e}</h1>")
             """body_data = data.split(b"\r\n\r\n", 1)[-1]
             parsed_data = parse_qs(body_data.decode())
             print(parsed_data)
@@ -48,7 +50,7 @@ def handle_request(data):
               body = f"<h1>The result is {val1 + val2}</h1>"
               return build_response("200 OK", body)
             except (ValueError, TypeError):
-              return build_response("400 Bad Request", "<h1>400 Bad Request</h1>")"""
+              return build_response("400 Bad Request :)", "<h1>400 Bad Request</h1>")"""
 
         case _:
             return build_response("501 Not Implemented", "<h1>501 Not Implemented</h1>")
@@ -67,9 +69,6 @@ def build_response(status, body, content_type="text/html"):
     headers = [
         "Server: Manifold Server",
         f"Content-Type: {content_type}\r\n",
-        "Access-Control-Allow-Origin: *",  # This allows requests from any origin
-        "Access-Control-Allow-Methods: GET, POST",  # Allow GET and POST methods
-        "Access-Control-Allow-Headers: Content-Type"  # Allow content-type header
     ]
     header = "\r\n".join(headers).encode()
     response_line = response_line.encode()

@@ -2,32 +2,41 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>POST Request Example</title>
+    <title>Add some numbers :)</title>
   </head>
   <body>
-    <form action="/" method="POST">
-      <div>
-        <input
-          name="num1"
-          type="text"
-          class="form-control"
-          placeholder="2"
-          id="num1"
-        />
-      </div>
-      <div>
-        <input
-          name="num2"
-          type="text"
-          class="form-control"
-          placeholder="2"
-          id="num2"
-        />
-      </div>
-      <div>
-        <button>Send my greetings</button>
-      </div>
+    <form id="postForm">
+      <input type="hidden" name="num1" value="2" />
+      <input type="hidden" name="num2" value="4" />
+      <button type="button" onclick="Add()">Add</button>
     </form>
+    <div id="responseContainer"></div>
+
+    <script>
+      function Add() {
+        const formData = new URLSearchParams(
+          new FormData(document.getElementById("postForm")),
+        );
+
+        console.log("Form Data:", formData.toString());
+
+        fetch("http://127.0.0.1:65432", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: formData.toString(),
+        })
+          .then((response) => response.text())
+          .then((html) => {
+            document.getElementById("responseContainer").innerHTML = html;
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            document.getElementById("responseContainer").textContent =
+              "An error occurred.";
+          });
+      }
+    </script>
   </body>
 </html>
