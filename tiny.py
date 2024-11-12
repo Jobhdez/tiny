@@ -30,13 +30,21 @@ def handle_request(data):
             #key_val_pattern = rb'(\w+)=([^&\s]+)'
             #key_val_pattern = rb'(\w+)=([^&\s]+)'
 
+            ###key_val_pattern = rb'(?<=\r\n\r\n)(\w+)=([^&\s]+)'
+
+
             #data = re.findall(key_val_pattern, data)
             #print(data)
-            data = parse_qs("num1=2&num2=4")
-            print(data)
+            #print(data)
+            _,body = data.split(b'\r\n\r\n', 1)
+            #print(body)
+            #data = parse_qs(body.decode())
+            key_val_pattern = rb'(\w+)=([^&\s]+)'
+            data = re.findall(key_val_pattern, body)
+            data = dict(data)
             try:
-                val = int(data['num1'][0])
-                val2 = int(data['num2'][0])
+                val = int(data[b'num1'].decode())
+                val2 = int(data[b'num2'].decode())
                 body = f"<h1>The result is {val + val2}</h1>"
                 return build_response("200 OK", body)
             except  ValueError as e:
