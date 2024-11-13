@@ -1,0 +1,36 @@
+body {
+  background-color: black;
+}
+
+.container {
+  display: flex;
+}
+
+.left-half {
+  flex: 0 0 50%;
+}
+
+.editor {
+  display: flex;
+  height: 600px;
+  margin-top: 10px;
+  border: solid white 2px;
+}
+
+.boxcontainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: stretch;
+  gap: 10px;
+  background: black;
+  border: solid white 2px;
+}
+
+.boxitem {
+  background: grey;
+  width: 60px;
+  height: 30px;
+  color: white;
+  text-align: center;
+  margin-top: 4px;
+}

@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="recbox.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="left-half">
+        <div class="boxcontainer">
+          <button class="boxitem" type="button">Compile</button>
+          <button class="boxitem" type="button">Ast</button>
+          <button class="boxitem" type="button">Anf</button>
+          <button class="boxitem" type="button">x86</button>
+        </div>
+        <div class="editor" id="container"></div>
+        <script src="../node_modules/monaco-editor/min/vs/loader.js"></script>
+        <script>
+          require.config({
+            paths: { vs: "../node_modules/monaco-editor/min/vs" },
+          });
+
+          require(["vs/editor/editor.main"], function () {
+            var editor = monaco.editor.create(
+              document.getElementById("container"),
+              {
+                value: [
+                  "function x() {",
+                  '\tconsole.log("Hello world!");',
+                  "}",
+                ].join("\n"),
+                language: "javascript",
+                theme: "vs-dark",
+              },
+            );
+          });
+        </script>
+      </div>
+    </div>
+  </body>
+</html>

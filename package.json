@@ -1,0 +1,14 @@
+{
+  "name": "tiny",
+  "version": "1.0.0",
+  "description": "editor",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "job h",
+  "license": "ISC",
+  "dependencies": {
+    "monaco-editor": "^0.52.0"
+  }
+}
